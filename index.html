@@ -1,42 +1,192 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Happy Birthday Tahat 🎂</title>
-</head>
-<body style="
-  background:black;
-  color:#00ff00;
-  font-family:monospace;
-  text-align:center;
-  padding-top:50px;
-">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Tahat 🎂</title>
 
+<style>
+  :root {
+    --neon: #00ff99;
+    --bg: #050505;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #0a0a0a, #000);
+    color: var(--neon);
+    font-family: "JetBrains Mono", monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Floating particles */
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--neon);
+    opacity: 0.4;
+    animation: float 10s linear infinite;
+  }
+
+  @keyframes float {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-10vh); }
+  }
+
+  .card {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(0,255,153,0.2);
+    box-shadow: 0 0 40px rgba(0,255,153,0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 40px 30px;
+    max-width: 360px;
+    width: 90%;
+    text-align: center;
+    animation: fadeIn 1.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px var(--neon);
+  }
+
+  .terminal {
+    text-align: left;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    margin-bottom: 25px;
+    min-height: 120px;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    background: var(--neon);
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 30px;
+    border: 1px solid var(--neon);
+    color: var(--neon);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    transition: 0.3s ease;
+  }
+
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--neon);
+    opacity: 0;
+    transition: 0.3s;
+    z-index: -1;
+  }
+
+  .btn:hover {
+    color: #000;
+    box-shadow: 0 0 20px var(--neon);
+  }
+
+  .btn:hover::before {
+    opacity: 1;
+  }
+
+  .footer {
+    margin-top: 25px;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    text-align: center;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- particles -->
+<script>
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = 6 + Math.random() * 6 + "s";
+    document.body.appendChild(p);
+  }
+</script>
+
+<div class="card">
   <h1>🎉 HAPPY BIRTHDAY TAHAT 🎉</h1>
 
-  <p>Initializing Birthday Protocol...</p>
-  <p>Checking system date... ✔ Today</p>
-  <p>Loading Happiness Module... 100%</p>
-  <p>Cake Module Status: ACTIVATED 🍰</p>
+  <div class="terminal" id="terminal"></div>
 
-  <br>
+  <a class="btn" href="https://github.com/SadatRiyad/happy-birthday-tahat">
+    View Developer Notes 🧠
+  </a>
 
-  <p>
-    <a href="https://github.com/SadatRiyad/happy-birthday-tahat"
-       style="
-         color:#00ff00;
-         text-decoration:none;
-         border:1px solid #00ff00;
-         padding:12px;
-         display:inline-block;
-       ">
-       View Developer Notes 🧠
-    </a>
-  </p>
+  <div class="footer">
+    // May your life compile without errors<br>
+    // And your smile never crash 💚
+  </div>
+</div>
 
-  <br><br>
+<script>
+  const lines = [
+    "• Initializing Birthday Protocol...",
+    "• Checking system date... ✔ Today",
+    "• Loading Happiness Module... 100%",
+    "• Cake Module Status... ACTIVE 🍰",
+    "",
+    "★ Status: Tahat is officially one step closer to being a sakcunni...😅"
+  ];
 
-  <p>// May your life always run without errors</p>
-  <p>// And your smile never crash 💚</p>
+  const terminal = document.getElementById("terminal");
+  let line = 0;
+  let char = 0;
+
+  function type() {
+    if (line < lines.length) {
+      if (char < lines[line].length) {
+        terminal.innerHTML += lines[line][char++];
+      } else {
+        terminal.innerHTML += "<br>";
+        line++;
+        char = 0;
+      }
+      setTimeout(type, 40);
+    } else {
+      terminal.innerHTML += '<span class="cursor">&nbsp;</span>';
+    }
+  }
+
+  type();
+</script>
 
 </body>
 </html>

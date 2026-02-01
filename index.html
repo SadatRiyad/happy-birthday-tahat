@@ -11,9 +11,7 @@
     --bg: #050505;
   }
 
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   body {
     margin: 0;
@@ -27,7 +25,6 @@
     overflow: hidden;
   }
 
-  /* Floating particles */
   .particle {
     position: absolute;
     width: 2px;
@@ -42,7 +39,7 @@
     to { transform: translateY(-10vh); }
   }
 
-  .card {
+  .card, .lock {
     background: rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(0,255,153,0.2);
     box-shadow: 0 0 40px rgba(0,255,153,0.15);
@@ -55,6 +52,8 @@
     animation: fadeIn 1.5s ease;
   }
 
+  .card { display: none; }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -65,6 +64,52 @@
     font-size: 1.4rem;
     letter-spacing: 1px;
     text-shadow: 0 0 10px var(--neon);
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    background: black;
+    border: 1px solid var(--neon);
+    color: var(--neon);
+    border-radius: 8px;
+    font-family: inherit;
+    margin-top: 20px;
+    outline: none;
+  }
+
+  button, .btn {
+    margin-top: 20px;
+    padding: 12px 22px;
+    border-radius: 30px;
+    border: 1px solid var(--neon);
+    background: transparent;
+    color: var(--neon);
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  button:hover, .btn:hover {
+    background: var(--neon);
+    color: black;
+    box-shadow: 0 0 20px var(--neon);
+  }
+
+  .error {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    color: #ff7777;
+    display: none;
+  }
+
+  .hint {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    cursor: pointer;
+    text-decoration: underline;
   }
 
   .terminal {
@@ -86,51 +131,16 @@
     50% { opacity: 0; }
   }
 
-  .btn {
-    display: inline-block;
-    padding: 12px 22px;
-    border-radius: 30px;
-    border: 1px solid var(--neon);
-    color: var(--neon);
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-    transition: 0.3s ease;
-  }
-
-  .btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: var(--neon);
-    opacity: 0;
-    transition: 0.3s;
-    z-index: -1;
-  }
-
-  .btn:hover {
-    color: #000;
-    box-shadow: 0 0 20px var(--neon);
-  }
-
-  .btn:hover::before {
-    opacity: 1;
-  }
-
   .footer {
     margin-top: 25px;
     font-size: 0.7rem;
     opacity: 0.7;
-    text-align: center;
   }
 </style>
 </head>
 
 <body>
 
-<!-- particles -->
 <script>
   for (let i = 0; i < 40; i++) {
     const p = document.createElement("div");
@@ -141,7 +151,25 @@
   }
 </script>
 
-<div class="card">
+<!-- LOCK SCREEN -->
+<div class="lock" id="lock">
+  <h1>🔒 Access Restricted</h1>
+  <p>Enter the legendary promise</p>
+
+  <input id="password" placeholder="Enter password..." />
+  <button onclick="unlock()">Unlock</button>
+
+  <div class="error" id="error">
+    ❌ Promise still not fulfilled since 4 years ☕
+  </div>
+
+  <div class="hint" onclick="showHint()">
+    Hint: The legendary cold coffee promise to Sadat 😏
+  </div>
+</div>
+
+<!-- MAIN CARD -->
+<div class="card" id="card">
   <h1>🎉 HAPPY BIRTHDAY TAHAT 🎉</h1>
 
   <div class="terminal" id="terminal"></div>
@@ -157,6 +185,23 @@
 </div>
 
 <script>
+  const SECRET = "I definitely buy cold coffee for Sadat😁";
+
+  function unlock() {
+    const input = document.getElementById("password").value;
+    if (input === SECRET) {
+      document.getElementById("lock").style.display = "none";
+      document.getElementById("card").style.display = "block";
+      startTyping();
+    } else {
+      document.getElementById("error").style.display = "block";
+    }
+  }
+
+  function showHint() {
+    document.getElementById("password").value = SECRET;
+  }
+
   const lines = [
     "• Initializing Birthday Protocol...",
     "• Checking system date... ✔ Today",
@@ -167,25 +212,24 @@
   ];
 
   const terminal = document.getElementById("terminal");
-  let line = 0;
-  let char = 0;
+  let line = 0, char = 0;
 
-  function type() {
-    if (line < lines.length) {
-      if (char < lines[line].length) {
-        terminal.innerHTML += lines[line][char++];
+  function startTyping() {
+    function type() {
+      if (line < lines.length) {
+        if (char < lines[line].length) {
+          terminal.innerHTML += lines[line][char++];
+        } else {
+          terminal.innerHTML += "<br>";
+          line++; char = 0;
+        }
+        setTimeout(type, 40);
       } else {
-        terminal.innerHTML += "<br>";
-        line++;
-        char = 0;
+        terminal.innerHTML += '<span class="cursor">&nbsp;</span>';
       }
-      setTimeout(type, 40);
-    } else {
-      terminal.innerHTML += '<span class="cursor">&nbsp;</span>';
     }
+    type();
   }
-
-  type();
 </script>
 
 </body>
